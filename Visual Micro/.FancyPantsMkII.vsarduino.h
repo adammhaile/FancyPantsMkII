@@ -32,13 +32,15 @@ extern "C" void __cxa_pure_virtual() {;}
 //
 void displayMenu();
 void getEncoder();
-void buttonPress();
+void buttonSelect();
+void buttonOverride();
+void displayOverride();
 //
 
 #include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\variants\standard\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\cores\standard\arduino.h"
-#include "G:\ArduinoSketches\FancyPantsMkII\FancyPantsMkII.ino"
-#include "G:\ArduinoSketches\FancyPantsMkII\RTClib.cpp"
-#include "G:\ArduinoSketches\FancyPantsMkII\RTClib.h"
-#include "G:\ArduinoSketches\FancyPantsMkII\globals.h"
+#include "G:\GitHub\FancyPantsMkII\FancyPantsMkII.ino"
+#include "G:\GitHub\FancyPantsMkII\RTClib.cpp"
+#include "G:\GitHub\FancyPantsMkII\RTClib.h"
+#include "G:\GitHub\FancyPantsMkII\globals.h"
 #endif

@@ -6,7 +6,7 @@
 
 #include <Encoder.h>
 
-Encoder encoder(10, 11);
+Encoder encoder(10, 9);
 
 #define OLED_RESET 15
 Adafruit_SSD1306 display(OLED_RESET);
@@ -23,14 +23,16 @@ void setup()   {
 	//set button pin and pull-up resistor
 	pinMode(2, INPUT);
 	digitalWrite(2, HIGH);
+	attachInterrupt(2, buttonSelect, FALLING);
 
-	attachInterrupt(2, buttonPress, FALLING);
+	pinMode(11, INPUT);
+	digitalWrite(11, HIGH);
+	attachInterrupt(1, buttonOverride, FALLING);
+	
 
 	Serial.begin(115200);
 
-	//display.display(); // show splashscreen
-	//delay(2000);
-	//display.clearDisplay();   // clears the screen and buffer
+	display.setTextWrap(false);
 }
 
 uint8_t menuStart = 0;
@@ -39,11 +41,11 @@ uint8_t menuLine = 0;
 void displayMenu()
 {
 	display.setTextSize(1);
-	display.setTextColor(BLACK, WHITE);
+	display.setTextColor(WHITE);
 	display.setCursor(0,0);
 	display.print(menu(dispMenu));
-	//display.print(" - ");
-	//display.println((16 * 1024) - freeRam(), DEC);
+	display.print(" - ");
+	display.println((16 * 1024) - freeRam(), DEC);
 
 	display.setTextSize(2);
 	display.setCursor(0,16);
@@ -57,8 +59,8 @@ void displayMenu()
 		else
 			display.setTextColor(WHITE);
 
-		display.setCursor(0,16+(16*menuLine));
-		display.print(menu(menuIndex));
+		//display.setCursor(0,16+(16*menuLine));
+		display.println(menu(menuIndex));
 		menuLine++;
 	}
 
@@ -68,7 +70,7 @@ void displayMenu()
 
 void getEncoder() {
 	static long newEnc;
-	newEnc = encoder.read() / 2; //current encoder has too many steps and pressing the button causes a step to happen
+	newEnc = encoder.read() / 4; //current encoder has too many steps and pressing the button causes a step to happen
 	if(newEnc != oldEnc)
 	{
 		if(newEnc > oldEnc)
@@ -85,26 +87,64 @@ void getEncoder() {
 	}
 }
 
-void buttonPress()
+void buttonSelect()
 {
-	if ((millis() - lastButton) > DEBOUNCE_TIME)
+	if (TimeElapsed(lastSelect, DEBOUNCE_TIME))
 	{   
-		lastButton = millis();
-		buttonPressed = true;
+		lastSelect = millis();
+		selected = true;
 	}
+}
+
+void buttonOverride()
+{
+	if (TimeElapsed(lastOverride, DEBOUNCE_TIME))
+	{   
+		lastOverride = millis();
+		overridden = true;
+		countdown = OVERRIDE_TIME;
+	}
+}
+
+void displayOverride()
+{
+	display.setTextSize(8);
+	display.setTextColor(WHITE);
+	display.setCursor(countdown > 9 ? 20 : 44, 4);
+	display.print(countdown);
+
+	display.display();
+	display.clearDisplay();
 }
 
 void loop() {
 
-	if(buttonPressed)
+	if(selected)
 	{
-		buttonPressed = false;
+		selected = false;
 		dispMenu = curMenu;
 		//pressCount++;
 	}
 
-	displayMenu();
-	getEncoder();
+	if(overridden)
+	{
+		if(TimeElapsed(overrideRef, 1000))
+		{
+			overrideRef = millis();
+			displayOverride();
+			countdown--;
+			if(countdown < 0)
+			{
+				overridden = false;
+				overrideRef = 0;
+			}
+		}
+	}
+	else
+	{
+		displayMenu();
+		getEncoder();
+	}
 }
 
 
