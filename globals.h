@@ -1,5 +1,28 @@
 #include "Arduino.h"
 
+#include "Adafruit_GFX.h"
+#include "Adafruit_SSD1306.h"
+
+#include "Encoder.h"
+
+#include "strip_util.h"
+
+#define ENCODER_A 10
+#define ENCODER_B 9
+Encoder encoder(ENCODER_A, ENCODER_B);
+
+#define OLED_RESET 15
+Adafruit_SSD1306 display(OLED_RESET);
+
+#if (SSD1306_LCDHEIGHT != 64)
+#error("Height incorrect, please fix Adafruit_SSD1306.h!");
+#endif
+
+#define ENCODER_BTN_PIN 2
+#define ENCODER_BTN_INT 2
+#define OVER_BTN_PIN 11
+#define OVER_BTN_INT 1
+
 #define MENU_SIZE 10
 #define MAX_MENU (MENU_SIZE-1)
 #define MENU_SIDE 1

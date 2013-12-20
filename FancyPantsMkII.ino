@@ -1,38 +1,53 @@
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-
 #include "globals.h"
-
-#include <Encoder.h>
-
-Encoder encoder(10, 9);
-
-#define OLED_RESET 15
-Adafruit_SSD1306 display(OLED_RESET);
-
-#if (SSD1306_LCDHEIGHT != 64)
-#error("Height incorrect, please fix Adafruit_SSD1306.h!");
-#endif
+#include "TimerOne.h"
 
 void setup()   {  
-	// by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
 	// init done
 
 	//set button pin and pull-up resistor
-	pinMode(2, INPUT);
-	digitalWrite(2, HIGH);
-	attachInterrupt(2, buttonSelect, FALLING);
+	pinMode(ENCODER_BTN_PIN, INPUT);
+	digitalWrite(ENCODER_BTN_PIN, HIGH);
+	attachInterrupt(ENCODER_BTN_INT, buttonSelect, FALLING);
 
-	pinMode(11, INPUT);
-	digitalWrite(11, HIGH);
-	attachInterrupt(1, buttonOverride, FALLING);
-	
+	pinMode(OVER_BTN_PIN, INPUT);
+	digitalWrite(OVER_BTN_PIN, HIGH);
+	attachInterrupt(OVER_BTN_INT, buttonOverride, FALLING);
 
 	Serial.begin(115200);
 
 	display.setTextWrap(false);
+
+	displayMenu();
+
+	stripInit();
+
+	colorFill(C_RED);
+	ledShow();
+	delay(250);
+
+	colorFill(C_GREEN);
+	ledShow();
+	delay(250);
+
+	colorFill(C_BLUE);
+	ledShow();
+	delay(250);
+
+	allOff();
+	ledShow();
+
+	Timer1.initialize();
+	Timer1.attachInterrupt(animStep, 1000000 / 60); // 60 frames/second
+}
+
+void animStep()
+{
+	rainbowCycle();
+	ledShow();
+
+	curStep++;
 }
 
 uint8_t menuStart = 0;

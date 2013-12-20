@@ -30,6 +30,7 @@ typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
 //
+void animStep();
 void displayMenu();
 void getEncoder();
 void buttonSelect();
@@ -40,7 +41,20 @@ void displayOverride();
 #include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\variants\standard\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\cores\standard\arduino.h"
 #include "G:\GitHub\FancyPantsMkII\FancyPantsMkII.ino"
-#include "G:\GitHub\FancyPantsMkII\RTClib.cpp"
-#include "G:\GitHub\FancyPantsMkII\RTClib.h"
+#include "G:\GitHub\FancyPantsMkII\Adafruit_GFX.cpp"
+#include "G:\GitHub\FancyPantsMkII\Adafruit_GFX.h"
+#include "G:\GitHub\FancyPantsMkII\Adafruit_NeoPixel.cpp"
+#include "G:\GitHub\FancyPantsMkII\Adafruit_NeoPixel.h"
+#include "G:\GitHub\FancyPantsMkII\Adafruit_SSD1306.cpp"
+#include "G:\GitHub\FancyPantsMkII\Adafruit_SSD1306.h"
+#include "G:\GitHub\FancyPantsMkII\Encoder.cpp"
+#include "G:\GitHub\FancyPantsMkII\Encoder.h"
+#include "G:\GitHub\FancyPantsMkII\TimerOne.cpp"
+#include "G:\GitHub\FancyPantsMkII\TimerOne.h"
+#include "G:\GitHub\FancyPantsMkII\direct_pin_read.h"
+#include "G:\GitHub\FancyPantsMkII\glcdfont.c"
 #include "G:\GitHub\FancyPantsMkII\globals.h"
+#include "G:\GitHub\FancyPantsMkII\interrupt_config.h"
+#include "G:\GitHub\FancyPantsMkII\interrupt_pins.h"
+#include "G:\GitHub\FancyPantsMkII\strip_util.h"
 #endif
