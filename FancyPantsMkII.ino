@@ -14,10 +14,18 @@ void loadBright() {
 }
 
 void setup()   {  
+
+	//init all the things
+	curMenu = 0;
+	dispMenu = 0;
+	curStep = 0;
+	oldStep = 0;
+	curAnim = 1;
+	oldAnim = 1;
+
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
 	display.clearDisplay();
 	display.display();
-	// init done
 
 	//set button pin and pull-up resistor
 	pinMode(ENCODER_BTN_PIN, INPUT);
@@ -129,6 +137,9 @@ void getEncoder() {
 			_brightPercent += dir * 10;
 			if(_brightPercent > 100) _brightPercent = MIN_BRIGHT;
 			else if(_brightPercent < MIN_BRIGHT) _brightPercent = 100;
+
+			_brightness = (int)(255.0  * (((float)_brightPercent) / 100.0));
+			setBrightness(_brightness);
 		}
 		else
 		{
@@ -215,8 +226,8 @@ void loop() {
 		else if(menuLevel == MENU_BRIGHT)
 		{
 			menuLevel = MENU_HOME;
-			_brightness = (int)(255.0  * (((float)_brightPercent) / 100.0));
-			setBrightness(_brightness);
+			//_brightness = (int)(255.0  * (((float)_brightPercent) / 100.0));
+			//setBrightness(_brightness);
 			saveBright();
 		}
 		//pressCount++;
