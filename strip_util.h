@@ -1,5 +1,9 @@
 #include "Adafruit_NeoPixel.h"
 
+uint8_t _brightness = 25;
+#define MIN_BRIGHT 10
+uint8_t _brightPercent = 10;
+
 #define NEO_A_PIN 0
 #define NEO_A_NUM 120
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NEO_A_NUM, NEO_A_PIN, NEO_GRB + NEO_KHZ800);
@@ -21,7 +25,9 @@ void colorFill(uint32_t c) {
 		strip.setPixelColor(i, c);
 	}
 }
-
+void setBrightness(uint8_t level) { 
+	strip.setBrightness(level);
+}
 void allOff() {
 	colorFill(C_OFF);
 }
@@ -118,6 +124,6 @@ const __FlashStringHelper * animNames(uint8_t i)
 void stripInit()
 {
 	strip.begin();
-	strip.setBrightness(32);
+	strip.setBrightness(_brightness);
 	ledShow();
 }

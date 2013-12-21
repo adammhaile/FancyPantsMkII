@@ -1,6 +1,17 @@
+#include <EEPROM.h>
 #include <Wire.h>
 #include "globals.h"
 #include "TimerOne.h"
+
+void saveBright() {
+	EEPROM.write(0, _brightPercent);
+}
+
+void loadBright() {
+	_brightPercent = EEPROM.read(0);
+	_brightness = (int)(255.0  * (((float)_brightPercent) / 100.0));
+	setBrightness(_brightness);
+}
 
 void setup()   {  
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
@@ -19,6 +30,8 @@ void setup()   {
 
 	Serial.begin(115200);
 	display.setTextWrap(false);
+
+	loadBright();
 
 	displayMenu();
 
@@ -63,17 +76,23 @@ void displayMenu()
 	display.print(" - ");
 	display.println((16 * 1024) - freeRam(), DEC);
 
-	display.setTextSize(2);
-	display.setCursor(0,16);
-
-
-
 	if(menuLevel == MENU_BRIGHT)
 	{
-
+		display.setTextSize(4);
+		display.setTextColor(WHITE);
+		display.setCursor(20, 24);
+		if(_brightPercent < 100)
+			display.print(0);
+		if(_brightPercent < 10)
+			display.print(0);
+		display.print(_brightPercent);
+		display.print("%");
 	}
 	else
 	{
+		display.setTextSize(2);
+		display.setCursor(0,16);
+
 		menuStart = curMenu < MENU_SIDE ? menuSize - (MENU_SIDE - curMenu) : curMenu - MENU_SIDE;
 		menuLine = 0;
 		for(int i=menuStart; i<menuStart + 7; i++)
@@ -93,27 +112,33 @@ void displayMenu()
 		}
 	}
 
-
-
 	display.display();
 	display.clearDisplay();
 }
 
 void getEncoder() {
 	static long newEnc;
+	static uint8_t dir = 1;
 	newEnc = encoder.read() / 4; //current encoder has too many steps and pressing the button causes a step to happen
 	if(newEnc != oldEnc)
 	{
-		if(newEnc > oldEnc)
-			curMenu++;
-		else if(newEnc < oldEnc)
-			curMenu--;
+		dir = newEnc > oldEnc ? 1 : -1;
+		if(menuLevel == MENU_BRIGHT)
+		{
+			
+			_brightPercent += dir * 10;
+			if(_brightPercent > 100) _brightPercent = MIN_BRIGHT;
+			else if(_brightPercent < MIN_BRIGHT) _brightPercent = 100;
+		}
+		else
+		{
+			curMenu += dir;
 
-		if(curMenu > maxMenu)
-			curMenu = 0;
-		else if(curMenu < 0)
-			curMenu = maxMenu;
-
+			if(curMenu > maxMenu)
+				curMenu = 0;
+			else if(curMenu < 0)
+				curMenu = maxMenu;
+		}
 		oldEnc = newEnc;
 	}
 }
@@ -167,7 +192,7 @@ void loop() {
 			}
 			else if(dispMenu == 1)
 			{
-				menuLevel == MENU_BRIGHT;
+				menuLevel = MENU_BRIGHT;
 			}
 		}
 		else if(menuLevel == MENU_ANIM)
@@ -189,7 +214,10 @@ void loop() {
 		}
 		else if(menuLevel == MENU_BRIGHT)
 		{
-
+			menuLevel = MENU_HOME;
+			_brightness = (int)(255.0  * (((float)_brightPercent) / 100.0));
+			setBrightness(_brightness);
+			saveBright();
 		}
 		//pressCount++;
 	}

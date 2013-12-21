@@ -29,6 +29,8 @@
 typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
+void saveBright();
+void loadBright();
 //
 void animStep();
 void displayMenu();
