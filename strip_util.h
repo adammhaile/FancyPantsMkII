@@ -59,7 +59,7 @@ uint32_t Wheel(uint16_t WheelPos)
 
 ///Animations Here
 uint16_t curStep = 0;
-
+uint8_t  curAnim = 1;
 void rainbowCycle() {
 	static uint16_t i;
 	for(i=0; i< strip.numPixels(); i++) {
@@ -68,7 +68,52 @@ void rainbowCycle() {
 	if(curStep >= 256)
 		curStep = 0;
 }
+
+void fullRainbow() {
+	colorFill(Wheel(curStep & 255));
+	if(curStep >= 256)
+		curStep = 0;
+}
+
+uint32_t wipeColor = C_RED;
+void colorWipe() {
+	static uint16_t i;
+	for(i=0; i< curStep; i++) {
+		strip.setPixelColor(i, wipeColor);
+	}
+
+	if(curStep >= strip.numPixels())
+	{
+		allOff();
+		curStep = 0;
+	}
+}
+
+void none(){}
 ///End Animations
+#define ANIM_SIZE 4
+#define ANIM_MAX (ANIM_SIZE-1)
+
+typedef void (* animPtr)();
+animPtr anims[] = {
+	none,
+	rainbowCycle,
+	fullRainbow,
+	colorWipe,
+};
+
+const __FlashStringHelper * animNames(uint8_t i)
+{
+	static const __FlashStringHelper * anims[ANIM_SIZE] = 
+	{
+		F("<< BACK"),
+		F("RainbowCycle"),
+		F("FullRainbow"),
+		F("ColorWipe"),
+	};
+
+	return anims[i];
+}
 
 void stripInit()
 {

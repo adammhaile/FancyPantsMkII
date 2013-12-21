@@ -4,6 +4,8 @@
 
 void setup()   {  
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
+	display.clearDisplay();
+	display.display();
 	// init done
 
 	//set button pin and pull-up resistor
@@ -16,7 +18,6 @@ void setup()   {
 	attachInterrupt(OVER_BTN_INT, buttonOverride, FALLING);
 
 	Serial.begin(115200);
-
 	display.setTextWrap(false);
 
 	displayMenu();
@@ -39,12 +40,12 @@ void setup()   {
 	ledShow();
 
 	Timer1.initialize();
-	Timer1.attachInterrupt(animStep, 1000000 / 60); // 60 frames/second
+	Timer1.attachInterrupt(animStep, 1000000 / 60); // 30 frames/second
 }
 
 void animStep()
 {
-	rainbowCycle();
+	anims[curAnim]();
 	ledShow();
 
 	curStep++;
@@ -58,26 +59,41 @@ void displayMenu()
 	display.setTextSize(1);
 	display.setTextColor(WHITE);
 	display.setCursor(0,0);
-	display.print(menu(dispMenu));
+	display.print(animNames(curAnim));
 	display.print(" - ");
 	display.println((16 * 1024) - freeRam(), DEC);
 
 	display.setTextSize(2);
 	display.setCursor(0,16);
-	menuStart = curMenu < MENU_SIDE ? MENU_SIZE - (MENU_SIDE - curMenu) : curMenu - MENU_SIDE;
-	menuLine = 0;
-	for(int i=menuStart; i<menuStart + 7; i++)
-	{
-		menuIndex = i > MAX_MENU ? i - MENU_SIZE : i;
-		if(menuIndex == curMenu)
-			display.setTextColor(BLACK, WHITE);
-		else
-			display.setTextColor(WHITE);
 
-		//display.setCursor(0,16+(16*menuLine));
-		display.println(menu(menuIndex));
-		menuLine++;
+
+
+	if(menuLevel == MENU_BRIGHT)
+	{
+
 	}
+	else
+	{
+		menuStart = curMenu < MENU_SIDE ? menuSize - (MENU_SIDE - curMenu) : curMenu - MENU_SIDE;
+		menuLine = 0;
+		for(int i=menuStart; i<menuStart + 7; i++)
+		{
+			menuIndex = i > maxMenu ? i - menuSize : i;
+			if(menuIndex == curMenu)
+				display.setTextColor(BLACK, WHITE);
+			else
+				display.setTextColor(WHITE);
+
+			if(menuLevel == MENU_HOME)
+				display.println(menu(menuIndex));
+			else if(menuLevel == MENU_ANIM)
+				display.println(animNames(menuIndex));
+
+			menuLine++;
+		}
+	}
+
+
 
 	display.display();
 	display.clearDisplay();
@@ -93,10 +109,10 @@ void getEncoder() {
 		else if(newEnc < oldEnc)
 			curMenu--;
 
-		if(curMenu > MAX_MENU)
+		if(curMenu > maxMenu)
 			curMenu = 0;
 		else if(curMenu < 0)
-			curMenu = MAX_MENU;
+			curMenu = maxMenu;
 
 		oldEnc = newEnc;
 	}
@@ -138,6 +154,43 @@ void loop() {
 	{
 		selected = false;
 		dispMenu = curMenu;
+
+		if(menuLevel == MENU_HOME)
+		{
+			if(dispMenu == 0) //Animations
+			{
+				menuLevel = MENU_ANIM;
+				dispMenu = 0;
+				curMenu = 0;
+				maxMenu = ANIM_MAX;
+				menuSize = ANIM_SIZE;
+			}
+			else if(dispMenu == 1)
+			{
+				menuLevel == MENU_BRIGHT;
+			}
+		}
+		else if(menuLevel == MENU_ANIM)
+		{
+			if(dispMenu == 0)
+			{
+				menuLevel = MENU_HOME;
+				dispMenu = 0;
+				curMenu = 0;
+				maxMenu = MAX_MENU;
+				menuSize = MENU_SIZE;
+			}
+			else
+			{
+				allOff();
+				curAnim = dispMenu;
+				curStep = 0;
+			}
+		}
+		else if(menuLevel == MENU_BRIGHT)
+		{
+
+		}
 		//pressCount++;
 	}
 
