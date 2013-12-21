@@ -13,6 +13,7 @@ uint32_t C(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 #define C_OFF		C(0,0,0)
+#define C_WHITE		C(255,255,255)
 #define C_RED		C(255,0,0)
 #define C_GREEN		C(0,255,0)
 #define C_BLUE		C(0,0,255)
@@ -65,7 +66,9 @@ uint32_t Wheel(uint16_t WheelPos)
 
 ///Animations Here
 uint16_t curStep = 0;
+uint16_t oldStep = 0;
 uint8_t  curAnim = 1;
+uint8_t  oldAnim = 1;
 void rainbowCycle() {
 	static uint16_t i;
 	for(i=0; i< strip.numPixels(); i++) {
@@ -95,14 +98,19 @@ void colorWipe() {
 	}
 }
 
-void none(){}
+void max_overload(){
+	if((curStep/10) % 2)
+		colorFill(C_OFF);
+	else
+		colorFill(C_WHITE);
+}
 ///End Animations
 #define ANIM_SIZE 4
 #define ANIM_MAX (ANIM_SIZE-1)
 
 typedef void (* animPtr)();
 animPtr anims[] = {
-	none,
+	max_overload,
 	rainbowCycle,
 	fullRainbow,
 	colorWipe,

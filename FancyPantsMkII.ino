@@ -224,13 +224,24 @@ void loop() {
 
 	if(overridden)
 	{
+		if(curAnim)
+		{
+			oldAnim = curAnim;
+			oldStep = curStep;
+			curAnim = 0;
+			setBrightness(255);
+		}
+
 		if(TimeElapsed(overrideRef, 1000))
 		{
 			overrideRef = millis();
 			displayOverride();
 			countdown--;
-			if(countdown < 0)
+			if(countdown < 1)
 			{
+				setBrightness(_brightness);
+				curStep = oldStep;
+				curAnim = oldAnim;
 				overridden = false;
 				overrideRef = 0;
 			}
