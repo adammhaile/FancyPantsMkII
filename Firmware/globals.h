@@ -7,6 +7,7 @@
 
 #include "strip_util.h"
 
+
 #define ENCODER_A 10
 #define ENCODER_B 9
 Encoder encoder(ENCODER_A, ENCODER_B);
@@ -53,6 +54,7 @@ volatile unsigned long lastOverride = 0;
 
 volatile bool selected = false;
 volatile bool overridden = false;
+volatile bool updateDisplay = true;
 
 uint8_t pressCount = 0;
 

@@ -1,0 +1,474 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:SparkFun
+LIBS:w_connectors
+LIBS:w_device
+LIBS:ML_Kicad
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date "30 dec 2013"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L HEADER_3X2 JP1
+U 1 1 522FB9A7
+P 4400 2150
+F 0 "JP1" H 4400 2350 60  0000 C CNN
+F 1 "ICSP" H 4400 1950 60  0000 C CNN
+F 2 "~" H 4400 2150 60  0000 C CNN
+F 3 "~" H 4400 2150 60  0000 C CNN
+	1    4400 2150
+	1    0    0    -1  
+$EndComp
+Text GLabel 4200 2050 0    30   Input ~ 0
+MISO
+Text GLabel 4200 2150 0    30   Input ~ 0
+SCK
+Text GLabel 4200 2250 0    30   Input ~ 0
+RST
+Text GLabel 4600 2050 2    30   Input ~ 0
+5VCC
+Text GLabel 4600 2150 2    30   Input ~ 0
+MOSI
+Text GLabel 4600 2250 2    30   Input ~ 0
+GND
+$Comp
+L FTDI_BASICPTH JP2
+U 1 1 522FBB4E
+P 5050 2200
+F 0 "JP2" H 4850 2630 50  0000 L BNN
+F 1 "FTDI" H 4850 1800 50  0000 L BNN
+F 2 "SparkFun-FTDI_BASIC" H 5200 1750 50  0001 C CNN
+F 3 "" H 5050 2200 60  0000 C CNN
+	1    5050 2200
+	1    0    0    -1  
+$EndComp
+Text GLabel 5300 1900 2    30   Input ~ 0
+GND
+Text GLabel 5300 2200 2    30   Input ~ 0
+TXO
+Text GLabel 5300 2300 2    30   Input ~ 0
+RXI
+Text GLabel 5550 2400 1    30   Input ~ 0
+RST
+$Comp
+L CAP_ C1
+U 1 1 522FBC24
+P 5450 2500
+F 0 "C1" H 5510 2615 50  0000 L BNN
+F 1 "0.1uF" H 5510 2415 50  0000 L BNN
+F 2 "SparkFun-AXIAL-5MM" H 5900 2350 50  0001 C CNN
+F 3 "" H 5450 2500 60  0000 C CNN
+	1    5450 2500
+	0    -1   1    0   
+$EndComp
+$Comp
+L RESISTORPTH-1/4W R1
+U 1 1 522FBCB7
+P 4250 2900
+F 0 "R1" H 4100 3000 50  0000 L BNN
+F 1 "10K" H 4100 2770 50  0000 L BNN
+F 2 "SparkFun-AXIAL-0.4" H 4500 2700 50  0001 C CNN
+F 3 "" H 4250 2900 60  0000 C CNN
+	1    4250 2900
+	0    1    1    0   
+$EndComp
+$Comp
+L CAP_ C2
+U 1 1 522FBCC4
+P 5300 3350
+F 0 "C2" H 5360 3465 50  0000 L BNN
+F 1 "0.1uF" H 5360 3265 50  0000 L BNN
+F 2 "SparkFun-AXIAL-5MM" H 5750 3200 50  0001 C CNN
+F 3 "" H 5300 3350 60  0000 C CNN
+	1    5300 3350
+	0    -1   1    0   
+$EndComp
+Text GLabel 4250 2650 1    30   Input ~ 0
+5VCC
+Text GLabel 5450 3350 2    30   Input ~ 0
+GND
+Text GLabel 5050 3350 0    30   Input ~ 0
+5VCC
+Text GLabel 4250 3150 3    30   Input ~ 0
+RST
+$Comp
+L RESONATOR-WIDE Y1
+U 1 1 522FBF5A
+P 4800 3200
+F 0 "Y1" H 4800 3350 50  0000 C CNN
+F 1 "16MHz" H 5200 2900 50  0000 C CNN
+F 2 "" H 4800 3200 60  0000 C CNN
+F 3 "" H 4800 3200 60  0000 C CNN
+	1    4800 3200
+	-1   0    0    1   
+$EndComp
+Text GLabel 4800 2800 1    30   Input ~ 0
+GND
+Text GLabel 5000 3200 2    30   Input ~ 0
+TOSC2
+Text GLabel 4600 3200 0    30   Input ~ 0
+TOSC1
+Text GLabel 5300 2100 2    30   Input ~ 0
+5VCC
+$Comp
+L ATMEGA1284P-P IC1
+U 1 1 5277F70B
+P 2050 3000
+F 0 "IC1" H 1200 4880 40  0000 L BNN
+F 1 "ATMEGA1284P-P" H 2450 1050 40  0000 L BNN
+F 2 "DIL40" H 2050 3000 30  0000 C CIN
+F 3 "" H 2050 3000 60  0000 C CNN
+	1    2050 3000
+	1    0    0    -1  
+$EndComp
+Text GLabel 1850 5150 3    30   Input ~ 0
+GND
+$Comp
+L PWR_FLAG #FLG01
+U 1 1 5277F7D3
+P 1800 5100
+F 0 "#FLG01" H 1800 5195 30  0001 C CNN
+F 1 "PWR_FLAG" H 1800 5280 30  0000 C CNN
+F 2 "" H 1800 5100 60  0000 C CNN
+F 3 "" H 1800 5100 60  0000 C CNN
+	1    1800 5100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 5277F7E0
+P 2100 5100
+F 0 "#PWR02" H 2100 5100 30  0001 C CNN
+F 1 "GND" H 2100 5030 30  0001 C CNN
+F 2 "" H 2100 5100 60  0000 C CNN
+F 3 "" H 2100 5100 60  0000 C CNN
+	1    2100 5100
+	0    -1   -1   0   
+$EndComp
+Text GLabel 1850 850  1    30   Input ~ 0
+5VCC
+$Comp
+L PWR_FLAG #FLG03
+U 1 1 5277F9CD
+P 1750 950
+F 0 "#FLG03" H 1750 1045 30  0001 C CNN
+F 1 "PWR_FLAG" H 1750 1130 30  0000 C CNN
+F 2 "" H 1750 950 60  0000 C CNN
+F 3 "" H 1750 950 60  0000 C CNN
+	1    1750 950 
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +5V #PWR04
+U 1 1 5277F9D3
+P 2150 1000
+F 0 "#PWR04" H 2150 1090 20  0001 C CNN
+F 1 "+5V" H 2150 1090 30  0000 C CNN
+F 2 "" H 2150 1000 60  0000 C CNN
+F 3 "" H 2150 1000 60  0000 C CNN
+	1    2150 1000
+	0    1    1    0   
+$EndComp
+Text GLabel 1000 2100 0    30   Input ~ 0
+TOSC1
+Text GLabel 1000 1700 0    30   Input ~ 0
+TOSC2
+Text GLabel 1000 1300 0    30   Input ~ 0
+RST
+Text GLabel 3100 2700 2    30   Input ~ 0
+MOSI
+Text GLabel 3100 2800 2    30   Input ~ 0
+MISO
+Text GLabel 3100 2900 2    30   Input ~ 0
+SCK
+Text GLabel 3400 4050 2    30   Input ~ 0
+TXO
+Text GLabel 3400 4150 2    30   Input ~ 0
+RXI
+Text GLabel 3100 2200 2    30   Input ~ 0
+NEOA
+Text GLabel 3100 2300 2    30   Input ~ 0
+NEOB
+Text GLabel 3100 2400 2    30   Input ~ 0
+ENC_BTN
+Text GLabel 3100 4100 2    30   Input ~ 0
+ENC_B
+Text GLabel 3100 4200 2    30   Input ~ 0
+ENC_A
+Text GLabel 3100 4300 2    30   Input ~ 0
+BTN
+Text GLabel 3100 3100 2    30   Input ~ 0
+SCL
+Text GLabel 3100 3200 2    30   Input ~ 0
+SDA
+Wire Wire Line
+	4250 2050 4200 2050
+Wire Wire Line
+	4200 2150 4250 2150
+Wire Wire Line
+	4250 2250 4200 2250
+Wire Wire Line
+	4550 2050 4600 2050
+Wire Wire Line
+	4600 2150 4550 2150
+Wire Wire Line
+	4550 2250 4600 2250
+Wire Wire Line
+	5300 1900 5250 1900
+Wire Wire Line
+	5250 1900 5250 2000
+Wire Wire Line
+	5300 2200 5250 2200
+Wire Wire Line
+	5250 2300 5300 2300
+Wire Wire Line
+	5250 2400 5250 2500
+Wire Wire Line
+	5550 2500 5550 2400
+Wire Wire Line
+	4250 2650 4250 2700
+Wire Wire Line
+	4250 3100 4250 3150
+Wire Wire Line
+	5050 3350 5100 3350
+Wire Wire Line
+	5400 3350 5450 3350
+Wire Wire Line
+	4600 3200 4700 3200
+Wire Wire Line
+	4800 2900 4800 2800
+Wire Wire Line
+	5000 3200 4900 3200
+Wire Wire Line
+	1800 5100 2100 5100
+Wire Wire Line
+	1850 5000 1850 5150
+Connection ~ 1850 5100
+Wire Wire Line
+	2050 5000 2050 5100
+Connection ~ 2050 5100
+Wire Wire Line
+	1850 1000 2150 1000
+Connection ~ 2050 1000
+Wire Wire Line
+	1850 850  1850 1000
+Wire Wire Line
+	1750 950  1850 950 
+Connection ~ 1850 950 
+Wire Wire Line
+	3100 2200 3050 2200
+Wire Wire Line
+	3050 2300 3100 2300
+Wire Wire Line
+	3100 2400 3050 2400
+Wire Wire Line
+	3050 3100 3100 3100
+Wire Wire Line
+	3100 3200 3050 3200
+Wire Wire Line
+	3050 4000 3050 4050
+Wire Wire Line
+	3050 4050 3400 4050
+Wire Wire Line
+	3050 4100 3100 4100
+Wire Wire Line
+	3050 4100 3050 4150
+Wire Wire Line
+	3050 4150 3400 4150
+Wire Wire Line
+	3050 4200 3100 4200
+Wire Wire Line
+	3100 4300 3050 4300
+Wire Wire Line
+	1000 1300 1050 1300
+Wire Wire Line
+	1000 1700 1050 1700
+Wire Wire Line
+	1050 2100 1000 2100
+$Comp
+L ENCODER_SWITCH E1
+U 1 1 52C0DA05
+P 4700 4450
+F 0 "E1" H 4700 4650 40  0000 C CNN
+F 1 "ENCODER_SWITCH" V 4550 4450 40  0000 C CNN
+F 2 "~" H 4700 4450 60  0000 C CNN
+F 3 "~" H 4700 4450 60  0000 C CNN
+	1    4700 4450
+	1    0    0    -1  
+$EndComp
+Text GLabel 4900 4500 2    30   Input ~ 0
+ENC_B
+Text GLabel 4900 4400 2    30   Input ~ 0
+ENC_A
+Text GLabel 4700 4650 3    30   Input ~ 0
+GND
+Text GLabel 4650 4200 1    30   Input ~ 0
+ENC_BTN
+Text GLabel 4750 4200 1    30   Input ~ 0
+GND
+Wire Wire Line
+	4650 4200 4650 4300
+Wire Wire Line
+	4750 4200 4750 4300
+Wire Wire Line
+	4900 4400 4850 4400
+Wire Wire Line
+	4850 4500 4900 4500
+Wire Wire Line
+	4700 4650 4700 4600
+Text GLabel 5800 4400 2    30   Input ~ 0
+BTN
+$Comp
+L TAC_SWITCHPTH S1
+U 1 1 52C0DD10
+P 5550 4400
+F 0 "S1" H 5450 4650 50  0000 L BNN
+F 1 "TAC_SWITCHPTH" H 5250 4200 50  0000 L BNN
+F 2 "SparkFun-TACTILE-PTH" H 5750 4100 50  0001 C CNN
+F 3 "" H 5550 4400 60  0000 C CNN
+	1    5550 4400
+	1    0    0    -1  
+$EndComp
+Text GLabel 5300 4400 0    30   Input ~ 0
+GND
+Wire Wire Line
+	5300 4400 5350 4400
+Wire Wire Line
+	5350 4400 5350 4500
+Wire Wire Line
+	5750 4400 5750 4500
+Wire Wire Line
+	5800 4400 5750 4400
+$Comp
+L HEADER_4 J1
+U 1 1 52C0DFAD
+P 4150 4400
+F 0 "J1" H 4150 4650 60  0000 C CNN
+F 1 "J_SIGNAL" H 4150 4150 60  0000 C CNN
+F 2 "~" H 4150 4400 60  0000 C CNN
+F 3 "~" H 4150 4400 60  0000 C CNN
+	1    4150 4400
+	1    0    0    -1  
+$EndComp
+Text GLabel 3950 4350 0    30   Input ~ 0
+NEOA
+Text GLabel 3950 4450 0    30   Input ~ 0
+NEOB
+Text GLabel 3950 4250 0    30   Input ~ 0
+5VCC
+Text GLabel 3950 4550 0    30   Input ~ 0
+GND
+Wire Wire Line
+	3950 4250 4050 4250
+Wire Wire Line
+	4050 4350 3950 4350
+Wire Wire Line
+	3950 4450 4050 4450
+Wire Wire Line
+	4050 4550 3950 4550
+$Comp
+L HEADER_8 J2
+U 1 1 52C0E1D7
+P 6250 3650
+F 0 "J2" H 6250 4100 60  0000 C CNN
+F 1 "J_DISPLAY" H 6250 3200 60  0000 C CNN
+F 2 "~" H 6250 3650 60  0000 C CNN
+F 3 "~" H 6250 3650 60  0000 C CNN
+	1    6250 3650
+	1    0    0    -1  
+$EndComp
+Text GLabel 6050 3300 0    30   Input ~ 0
+SDA
+Text GLabel 6050 3400 0    30   Input ~ 0
+SCL
+Text GLabel 6050 3600 0    30   Input ~ 0
+RST
+Text GLabel 3100 4700 2    30   Input ~ 0
+RST
+Wire Wire Line
+	3050 4700 3100 4700
+Text GLabel 6050 4000 0    30   Input ~ 0
+GND
+Text GLabel 6050 3900 0    30   Input ~ 0
+5VCC
+Wire Wire Line
+	6050 3300 6150 3300
+Wire Wire Line
+	6150 3400 6050 3400
+Wire Wire Line
+	6050 3600 6150 3600
+Wire Wire Line
+	6150 3900 6050 3900
+Wire Wire Line
+	6050 4000 6150 4000
+Wire Wire Line
+	3100 2900 3050 2900
+Wire Wire Line
+	3050 2800 3100 2800
+Wire Wire Line
+	3100 2700 3050 2700
+NoConn ~ 3050 1300
+NoConn ~ 3050 1400
+NoConn ~ 3050 1500
+NoConn ~ 3050 1600
+NoConn ~ 3050 1700
+NoConn ~ 3050 1800
+NoConn ~ 3050 1900
+NoConn ~ 3050 2000
+NoConn ~ 3050 2500
+NoConn ~ 3050 2600
+NoConn ~ 3050 3300
+NoConn ~ 3050 3400
+NoConn ~ 3050 3500
+NoConn ~ 3050 3600
+NoConn ~ 3050 3700
+NoConn ~ 3050 3800
+NoConn ~ 3050 4400
+NoConn ~ 3050 4500
+NoConn ~ 3050 4600
+NoConn ~ 6150 3700
+NoConn ~ 6150 3800
+NoConn ~ 6150 3500
+NoConn ~ 1050 2500
+Wire Wire Line
+	5250 2100 5300 2100
+$EndSCHEMATC

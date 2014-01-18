@@ -1,0 +1,80 @@
+Cmp-Mod V01 Created by PcbNew date = 12/30/2013 12:18:26 AM
+
+BeginCmp
+TimeStamp = /522FBC24;
+Reference = C1;
+ValeurCmp = 0.1uF;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /522FBCC4;
+Reference = C2;
+ValeurCmp = 0.1uF;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C0DA05;
+Reference = E1;
+ValeurCmp = ENCODER_SWITCH;
+IdModule  = encoder_alps-ec12d;
+EndCmp
+
+BeginCmp
+TimeStamp = /5277F70B;
+Reference = IC1;
+ValeurCmp = ATMEGA1284P-P;
+IdModule  = ML_DIL40;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C0DFAD;
+Reference = J1;
+ValeurCmp = J_SIGNAL;
+IdModule  = pin_strip_4_shifted;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C0E1D7;
+Reference = J2;
+ValeurCmp = J_DISPLAY;
+IdModule  = ML_ADA_OLED_096;
+EndCmp
+
+BeginCmp
+TimeStamp = /522FB9A7;
+Reference = JP1;
+ValeurCmp = ICSP;
+IdModule  = ICSP_shifted_pads;
+EndCmp
+
+BeginCmp
+TimeStamp = /522FBB4E;
+Reference = JP2;
+ValeurCmp = FTDI;
+IdModule  = ML_FTDI_shifted_pads;
+EndCmp
+
+BeginCmp
+TimeStamp = /522FBCB7;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = ML_R1-8W;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C0DD10;
+Reference = S1;
+ValeurCmp = TAC_SWITCHPTH;
+IdModule  = ML_6mm_TACTILE-PTH;
+EndCmp
+
+BeginCmp
+TimeStamp = /522FBF5A;
+Reference = Y1;
+ValeurCmp = 16MHz;
+IdModule  = ML_RESONATOR_16MHZ_PTH;
+EndCmp
+
+EndListe

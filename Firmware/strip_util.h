@@ -4,8 +4,8 @@ uint8_t _brightness = 25;
 #define MIN_BRIGHT 10
 uint8_t _brightPercent = 10;
 
-#define NEO_A_PIN 0
-#define NEO_A_NUM 120
+#define NEO_A_PIN 1
+#define NEO_A_NUM 42 * 6
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NEO_A_NUM, NEO_A_PIN, NEO_GRB + NEO_KHZ800);
 
 uint32_t C(uint8_t r, uint8_t g, uint8_t b) {
@@ -84,7 +84,7 @@ void fullRainbow() {
 		curStep = 0;
 }
 
-uint32_t wipeColor = C_RED;
+uint32_t wipeColor = C_GREEN;
 void colorWipe() {
 	static uint16_t i;
 	for(i=0; i< curStep; i++) {
@@ -99,7 +99,7 @@ void colorWipe() {
 }
 
 void max_overload(){
-	if((curStep/10) % 2)
+	if((curStep/4) % 2)
 		colorFill(C_OFF);
 	else
 		colorFill(C_WHITE);
