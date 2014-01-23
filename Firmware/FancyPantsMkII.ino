@@ -85,8 +85,8 @@ void displayMenu()
 	display.setTextColor(WHITE);
 	display.setCursor(0,0);
 	display.print(animNames(curAnim));
-	display.print(" - ");
-	display.println((16 * 1024) - freeRam(), DEC);
+	//display.print(" - ");
+	//display.println((16 * 1024) - freeRam(), DEC);
 
 	if(menuLevel == MENU_BRIGHT)
 	{

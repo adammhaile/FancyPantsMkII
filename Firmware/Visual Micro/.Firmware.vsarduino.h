@@ -53,6 +53,7 @@ void displayOverride();
 #include "G:\GitHub\FancyPantsMkII\Firmware\Encoder.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\TimerOne.cpp"
 #include "G:\GitHub\FancyPantsMkII\Firmware\TimerOne.h"
+#include "G:\GitHub\FancyPantsMkII\Firmware\arrays.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\direct_pin_read.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\glcdfont.c"
 #include "G:\GitHub\FancyPantsMkII\Firmware\globals.h"
