@@ -9,7 +9,7 @@ uint8_t _brightPercent = 10;
 #define NEO_A_PIN 0 //PB0
 #define NEO_A_NUM 42 * 6
 #define NEO_B_PIN 1 //PB1
-#define NEO_B_NUM 42 * 6
+#define NEO_B_NUM (42 * 6) - 2 //oops, lost a couple pixels
 #define NUM_PIXELS (NEO_A_NUM + NEO_B_NUM)
 #define NUM_X 12
 #define NUM_Y 42
@@ -22,7 +22,7 @@ Adafruit_NeoPixel stripB = Adafruit_NeoPixel(NEO_B_NUM, NEO_B_PIN, NEO_GRB + NEO
 #define C_WHITE		C(255,255,255)
 
 #define C_RED		C(255, 0, 0)
-#define C_ORANGE	C(255, 127, 0)
+#define C_ORANGE	C(255, 75, 0)
 #define C_YELLOW	C(255, 255, 0)
 #define C_GREEN		C(0, 255, 0)
 #define C_BLUE		C(0, 0, 255)
@@ -51,7 +51,9 @@ void setPixelColor(uint8_t x, uint8_t y, uint32_t c)
 	if(x < 6)
 		stripA.setPixelColor(_pixels[y][x], c);
 	else
+	{
 		stripB.setPixelColor(_pixels[y][x], c);
+	}
 }
 
 void colorFill(uint32_t c) {
@@ -103,7 +105,7 @@ static uint8_t _x, _y;
 //}
 
 //Helper to for the wheel calc
-uint32_t wheelHelper(uint16_t pos, uint16_t cycle_step, uint8_t length)
+static uint32_t wheelHelper(uint16_t pos, uint16_t cycle_step, uint8_t length)
 {
   return Wheel( ((pos * (WHEEL_MAX+1) / length) + cycle_step) & WHEEL_MAX);
 }
@@ -186,25 +188,74 @@ void rainbow_h_wipe()
 		curStep = 0;
 }
 
+void rainbow_v_wipe()
+{
+	for(_y=0; _y<NUM_Y; _y++)
+	{
+		static uint32_t c;
+		c = Wheel((_y * NUM_X + curStep) % WHEEL_MAX);
+		for(_x=0; _x<NUM_X; _x++)
+			setPixelColor(_x, _y, c);
+	}
+
+	if(curStep >= WHEEL_MAX)
+		curStep = 0;
+}
+
+#define OVERLOAD_COUNT 4
+uint8_t overloadColors[OVERLOAD_COUNT][3] = 
+{
+	{255,255,255},
+	{255,0,0},
+	{0,255,0},
+	{0,0,255},
+};
+uint8_t overloadColor = 0;
+bool overloadDir = true;
 void max_overload(){
-	if((curStep/4) % 2)
-		colorFill(C_OFF);
-	else
-		colorFill(C_WHITE);
+	if(curStep >= 256) 
+	{
+		overloadDir = !overloadDir;
+		if(overloadDir)
+		{
+			overloadColor++;
+			if(overloadColor >= OVERLOAD_COUNT)
+				overloadColor = 0;
+		}
+		curStep = 0;
+	}
+	static uint8_t r,g,b,brightness;
+	brightness = (overloadDir ? curStep : 255 - curStep);
+	r = (overloadColors[overloadColor][0] * brightness) >> 8;
+    g = (overloadColors[overloadColor][1] * brightness) >> 8;
+    b = (overloadColors[overloadColor][2] * brightness) >> 8;
+	colorFill(C(r,g,b));
 }
 ///End Animations
-#define ANIM_SIZE 7
+#define ANIM_SIZE 8
 #define ANIM_MAX (ANIM_SIZE-1)
 
 typedef void (* animPtr)();
-animPtr anims[] = {
+animPtr anims[ANIM_SIZE] = {
 	max_overload,
 	rainbowCycle,
 	fullRainbow,
 	colorWipe,
 	rainbow_h_wipe,
+	rainbow_v_wipe,
 	bloomIn,
 	bloomOut
+};
+
+uint8_t animStepSize[ANIM_SIZE] = {
+	50,//max_overload
+	1,//rainbowCycle
+	2,//fullRainbow
+	1,//colorWipe
+	4,//rainbow_h_wipe
+	4,//rainbow_v_wipe
+	1,//bloomIn
+	1,//bloomOut
 };
 
 const __FlashStringHelper * animNames(uint8_t i)
@@ -216,6 +267,7 @@ const __FlashStringHelper * animNames(uint8_t i)
 		F("FullRainbow"),
 		F("ColorWipe"),
 		F("Rainbow H"),
+		F("Rainbow V"),
 		F("Bloom In"),
 		F("Bloom Out"),
 	};

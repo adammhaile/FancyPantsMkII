@@ -1,11 +1,12 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 //Board = Mighty 1284p 16MHz using Optiboot
+#define __AVR_ATmega1284p__
 #define __AVR_ATmega1284P__
-#define 
 #define ARDUINO 105
 #define ARDUINO_MAIN
 #define __AVR__
+#define __avr__
 #define F_CPU 16000000L
 #define __cplusplus
 #define __inline__
@@ -40,8 +41,8 @@ void buttonOverride();
 void displayOverride();
 //
 
-#include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\variants\standard\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\cores\standard\arduino.h"
+#include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\variants\standard\pins_arduino.h" 
 #include "G:\GitHub\FancyPantsMkII\Firmware\FancyPantsMkII.ino"
 #include "G:\GitHub\FancyPantsMkII\Firmware\Adafruit_GFX.cpp"
 #include "G:\GitHub\FancyPantsMkII\Firmware\Adafruit_GFX.h"

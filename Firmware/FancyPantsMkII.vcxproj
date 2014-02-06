@@ -82,6 +82,7 @@
     <ClInclude Include="Adafruit_SSD1306.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="arrays.h" />
     <ClInclude Include="direct_pin_read.h">
       <FileType>CppCode</FileType>
     </ClInclude>
