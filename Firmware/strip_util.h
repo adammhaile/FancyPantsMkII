@@ -1,34 +1,6 @@
-#include "Adafruit_NeoPixel.h"
 #include "arrays.h"
-
-uint8_t _brightness = 25;
-#define MIN_BRIGHT 10
-uint8_t _brightPercent = 10;
-
-
-#define NEO_A_PIN 0 //PB0
-#define NEO_A_NUM 42 * 6
-#define NEO_B_PIN 1 //PB1
-#define NEO_B_NUM (42 * 6) - 2 //oops, lost a couple pixels
-#define NUM_PIXELS (NEO_A_NUM + NEO_B_NUM)
-#define NUM_X 12
-#define NUM_Y 42
-Adafruit_NeoPixel stripA = Adafruit_NeoPixel(NEO_A_NUM, NEO_A_PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel stripB = Adafruit_NeoPixel(NEO_B_NUM, NEO_B_PIN, NEO_GRB + NEO_KHZ800);
-
-#define C(r, g, b) ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b
-
-#define C_OFF		C(0,0,0)
-#define C_WHITE		C(255,255,255)
-
-#define C_RED		C(255, 0, 0)
-#define C_ORANGE	C(255, 75, 0)
-#define C_YELLOW	C(255, 255, 0)
-#define C_GREEN		C(0, 255, 0)
-#define C_BLUE		C(0, 0, 255)
-#define C_VIOLET	C(143, 0, 255)
-
-#define WHEEL_MAX 384
+#include "globals.h"
+#include "text_util.h"
 
 uint32_t _rainbow[] =
 {
@@ -39,22 +11,6 @@ uint32_t _rainbow[] =
 	C_BLUE,
 	C_VIOLET,
 };
-
-void ledShow() 
-{
-	stripA.show();
-	stripB.show();
-}
-
-void setPixelColor(uint8_t x, uint8_t y, uint32_t c)
-{
-	if(x < 6)
-		stripA.setPixelColor(_pixels[y][x], c);
-	else
-	{
-		stripB.setPixelColor(_pixels[y][x], c);
-	}
-}
 
 void colorFill(uint32_t c) {
 	for(uint8_t x=0; x<NUM_X; x++)
@@ -231,14 +187,36 @@ void max_overload(){
     b = (overloadColors[overloadColor][2] * brightness) >> 8;
 	colorFill(C(r,g,b));
 }
+
+
+void displayText()
+{
+	static int16_t posA = 41, posB = 41;
+	if(curStep > 1) curStep = 0;
+	
+	if(curStep % 2)
+	{
+		colorFill(C_OFF); //clear the buffer
+		if(drawString(5, posA, C_RED, "DR WHO SUCKS!"))
+			posA--;
+		else
+			posA = 41;
+
+		if(drawString(11, posB, C_GREEN, "BEST IN terms of PANTS!"))
+			posB--;
+		else
+			posB = 41;
+	}
+}
 ///End Animations
-#define ANIM_SIZE 8
+#define ANIM_SIZE 9
 #define ANIM_MAX (ANIM_SIZE-1)
 
 typedef void (* animPtr)();
 animPtr anims[ANIM_SIZE] = {
 	max_overload,
 	rainbowCycle,
+	displayText,
 	fullRainbow,
 	colorWipe,
 	rainbow_h_wipe,
@@ -250,6 +228,7 @@ animPtr anims[ANIM_SIZE] = {
 uint8_t animStepSize[ANIM_SIZE] = {
 	50,//max_overload
 	1,//rainbowCycle
+	1,//displayText
 	2,//fullRainbow
 	1,//colorWipe
 	4,//rainbow_h_wipe
@@ -264,6 +243,7 @@ const __FlashStringHelper * animNames(uint8_t i)
 	{
 		F("<< BACK"),
 		F("RainbowCycle"),
+		F("Text"),
 		F("FullRainbow"),
 		F("ColorWipe"),
 		F("Rainbow H"),

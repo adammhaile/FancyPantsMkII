@@ -52,6 +52,7 @@ void displayOverride();
 #include "G:\GitHub\FancyPantsMkII\Firmware\Adafruit_SSD1306.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\Encoder.cpp"
 #include "G:\GitHub\FancyPantsMkII\Firmware\Encoder.h"
+#include "G:\GitHub\FancyPantsMkII\Firmware\LEDFont.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\TimerOne.cpp"
 #include "G:\GitHub\FancyPantsMkII\Firmware\TimerOne.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\arrays.h"
@@ -61,4 +62,5 @@ void displayOverride();
 #include "G:\GitHub\FancyPantsMkII\Firmware\interrupt_config.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\interrupt_pins.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\strip_util.h"
+#include "G:\GitHub\FancyPantsMkII\Firmware\text_util.h"
 #endif

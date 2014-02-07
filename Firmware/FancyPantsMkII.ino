@@ -1,6 +1,7 @@
 #include <EEPROM.h>
 #include <Wire.h>
 #include "globals.h"
+#include "strip_util.h"
 #include "TimerOne.h"
 
 void saveBright() {
@@ -20,7 +21,7 @@ void setup()   {
 	dispMenu = 0;
 	curStep = 0;
 	oldStep = 0;
-	curAnim = 3;
+	curAnim = 2;
 	oldAnim = 1;
 
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
@@ -127,7 +128,7 @@ void displayMenu()
 	display.display();
 	display.clearDisplay();
 	
-	Serial.println(millis() - m, DEC);
+	//Serial.println(millis() - m, DEC);
 
 	updateDisplay = false;
 
@@ -276,5 +277,3 @@ void loop() {
 		getEncoder();
 	}
 }
-
-

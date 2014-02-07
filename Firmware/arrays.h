@@ -1,3 +1,5 @@
+#ifndef ARRAYS_H
+#define ARRAYS_H
 /*
 Complete map of pixel index to pixel x,y coordinates
 Note that you call as pixels[y][x] 
@@ -542,3 +544,5 @@ uint32_t Wheel(uint16_t pos)
 	if(pos > 384) return 0;
 	return _wheel[pos];
 }
+
+#endif
