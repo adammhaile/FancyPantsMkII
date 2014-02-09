@@ -151,6 +151,13 @@ uint8_t _vectors[42][12] =
 	{36, 28, 23, 21, 20, 20, 20, 20, 21, 23, 28, 36},
 };
 
+uint8_t vector(uint8_t x, uint8_t y)
+{
+	if(x >= 12 || y >= 42) return 0;
+	return _vectors[y][x];
+}
+
+
 uint32_t _wheel[384] = 
 {
 	8323072,

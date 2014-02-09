@@ -15,13 +15,13 @@ void loadBright() {
 }
 
 void setup()   {  
-
+	encoder.write(curEncPos *  4);
 	//init all the things
 	curMenu = 0;
 	dispMenu = 0;
 	curStep = 0;
 	oldStep = 0;
-	curAnim = 2;
+	curAnim = 3;
 	oldAnim = 1;
 
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
@@ -61,8 +61,8 @@ void setup()   {
 	allOff();
 	ledShow();
 
-	Timer1.initialize();
-	Timer1.attachInterrupt(animStep, 1000000 / 30); // 30 frames/second
+	//Timer1.initialize();
+	//Timer1.attachInterrupt(animStep, 1000000 / 30); // 30 frames/second
 }
 
 void animStep()
@@ -80,12 +80,13 @@ void displayMenu()
 {
 	//noInterrupts();
 
-	static uint32_t m;
-	m = millis();
+	//static uint32_t m;
+	//m = millis();
+
 	display.setTextSize(1);
 	display.setTextColor(WHITE);
 	display.setCursor(0,0);
-	display.print(animNames(curAnim));
+	display.print(_animNames[curAnim]);
 	display.print(" - ");
 	display.println((16 * 1024) - freeRam(), DEC);
 
@@ -117,9 +118,9 @@ void displayMenu()
 				display.setTextColor(WHITE);
 
 			if(menuLevel == MENU_HOME)
-				display.println(menu(menuIndex));
+				display.println(_main_menu[menuIndex]);
 			else if(menuLevel == MENU_ANIM)
-				display.println(animNames(menuIndex));
+				display.println(_animNames[menuIndex]);
 
 			menuLine++;
 		}
@@ -127,7 +128,7 @@ void displayMenu()
 
 	display.display();
 	display.clearDisplay();
-	
+
 	//Serial.println(millis() - m, DEC);
 
 	updateDisplay = false;
@@ -136,15 +137,16 @@ void displayMenu()
 }
 
 void getEncoder() {
-	static long newEnc;
 	static uint8_t dir = 1;
-	newEnc = encoder.read() / 2; //current encoder has too many steps and pressing the button causes a step to happen
-	if(newEnc != oldEnc)
+	newEnc = encoder.read() / 4; //current encoder has too many steps and pressing the button causes a step to happen
+
+	if(newEnc != curEncPos)
 	{
-		dir = newEnc > oldEnc ? -1 : 1;
+		//Serial.print(newEnc, DEC); Serial.print(" - "); Serial.println(curEncPos, DEC);
+		dir = newEnc > curEncPos ? -1 : 1;
 		if(menuLevel == MENU_BRIGHT)
 		{
-			
+
 			_brightPercent += dir * 10;
 			if(_brightPercent > 100) _brightPercent = MIN_BRIGHT;
 			else if(_brightPercent < MIN_BRIGHT) _brightPercent = 100;
@@ -161,9 +163,9 @@ void getEncoder() {
 			else if(curMenu < 0)
 				curMenu = maxMenu;
 		}
-		oldEnc = newEnc;
+		curEncPos = newEnc;
 
-		//updateDisplay = true;
+		updateDisplay = true;
 	}
 }
 
@@ -173,6 +175,7 @@ void buttonSelect()
 	{   
 		lastSelect = millis();
 		selected = true;
+		//Serial.println("BTN!");
 	}
 }
 
@@ -197,7 +200,26 @@ void displayOverride()
 	display.clearDisplay();
 }
 
+void toggleEnable()
+{
+	_enabled = !_enabled;
+	if(_enabled)
+	{
+		ledShow();
+	}
+	else
+	{
+		colorFill(C_OFF);
+		ledShow();
+	}
+}
+
 void loop() {
+	static long stepRef = 0;
+	if(TimeElapsed(stepRef, 33) && _enabled)
+	{
+		animStep();
+	}
 
 	if(selected)
 	{
@@ -218,9 +240,14 @@ void loop() {
 			{
 				menuLevel = MENU_BRIGHT;
 			}
+			else if(dispMenu == 2)
+			{
+				toggleEnable();
+			}
 		}
 		else if(menuLevel == MENU_ANIM)
 		{
+			Serial.println("anim");
 			if(dispMenu == 0)
 			{
 				menuLevel = MENU_HOME;
@@ -241,12 +268,14 @@ void loop() {
 			menuLevel = MENU_HOME;
 			saveBright();
 		}
-		
-		//updateDisplay = true;
+
+		updateDisplay = true;
 	}
 
 	if(overridden)
 	{
+		if(!_enabled) toggleEnable();
+
 		if(curAnim)
 		{
 			oldAnim = curAnim;
@@ -266,14 +295,17 @@ void loop() {
 				curStep = oldStep;
 				curAnim = oldAnim;
 				overridden = false;
+				updateDisplay = true;
 				overrideRef = 0;
 			}
 		}
 	}
 	else
 	{
-		//if(updateDisplay) 
-			displayMenu();
 		getEncoder();
+		if(updateDisplay) 
+		{
+			displayMenu();
+		}
 	}
 }

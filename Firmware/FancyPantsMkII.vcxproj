@@ -47,7 +47,7 @@
       <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\hardware\mighty-1284p\cores\standard;C:\Program Files (x86)\Arduino\hardware\mighty-1284p\variants\standard;C:\Program Files (x86)\Arduino\libraries\EEPROM;C:\Program Files (x86)\Arduino\libraries\EEPROM\utility;C:\Program Files (x86)\Arduino\libraries\Wire;C:\Program Files (x86)\Arduino\libraries\Wire\utility;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\;c:\program files (x86)\arduino\hardware\tools\avr\avr\include\avr\;c:\program files (x86)\arduino\hardware\tools\avr\avr\;c:\program files (x86)\arduino\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>G:\GitHub\FancyPantsMkII\Firmware\Visual Micro\.Firmware.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega1284P__;ARDUINO=105;ARDUINO_MAIN;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega1284p__;__AVR_ATmega1284P__;ARDUINO=105;ARDUINO_MAIN;__AVR__;__avr__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -96,7 +96,9 @@
     <ClInclude Include="interrupt_pins.h">
       <FileType>CppCode</FileType>
     </ClInclude>
+    <ClInclude Include="LEDFont.h" />
     <ClInclude Include="strip_util.h" />
+    <ClInclude Include="text_util.h" />
     <ClInclude Include="TimerOne.h" />
     <ClInclude Include="Visual Micro\.FancyPantsMkII.vsarduino.h" />
     <ClInclude Include="Visual Micro\.Firmware.vsarduino.h" />

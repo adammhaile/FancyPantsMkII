@@ -29,8 +29,8 @@ void allOff() {
 
 static uint8_t _x, _y;
 
-////Input a value 0 to cycle_max to get a color value.
-////The colours are a transition r - g -b - back to r
+//Input a value 0 to cycle_max to get a color value.
+//The colours are a transition r - g -b - back to r
 //uint32_t Wheel(uint16_t WheelPos)
 //{
 //	byte r, g, b;
@@ -63,7 +63,7 @@ static uint8_t _x, _y;
 //Helper to for the wheel calc
 static uint32_t wheelHelper(uint16_t pos, uint16_t cycle_step, uint8_t length)
 {
-  return Wheel( ((pos * (WHEEL_MAX+1) / length) + cycle_step) & WHEEL_MAX);
+	return Wheel(((pos * 384 / length) + cycle_step) % WHEEL_MAX);
 }
 
 ///Animations Here
@@ -113,16 +113,19 @@ Looks like a blooming flower
 dir = true -> bloom outward
 dir = false -> fold inward
 */
-void bloom(boolean dir) {
-	static uint8_t x, y;
-	for(int y=0; y<NUM_Y; y++) 
+void bloom(bool dir) {
+	for(_y=0; _y<NUM_Y; _y++) 
 	{
-		for(int x=0; x<NUM_X; x++)
+		for(_x=0; _x<NUM_X; _x++)
 		{
-			setPixelColor(x, y, wheelHelper(_vectors[y][x], dir ? WHEEL_MAX - curStep : curStep, NUM_Y));
+			static uint32_t c;
+			static uint16_t step;
+			step = dir ? (WHEEL_MAX - curStep) : curStep;
+			c = wheelHelper(vector(_x, _y), step, NUM_Y);
+			setPixelColor(_x, _y, c);
 		}
 	}
-
+	 
 	if(curStep >= WHEEL_MAX)
 		curStep = 0;
 }
@@ -135,7 +138,7 @@ void rainbow_h_wipe()
 	for(_x=0; _x<NUM_X; _x++)
 	{
 		static uint32_t c;
-		c = Wheel((_x * NUM_Y + curStep) % WHEEL_MAX);
+		c = wheelHelper(_x, curStep, NUM_X);
 		for(_y=0; _y<NUM_Y; _y++)
 			setPixelColor(_x, _y, c);
 	}
@@ -149,7 +152,7 @@ void rainbow_v_wipe()
 	for(_y=0; _y<NUM_Y; _y++)
 	{
 		static uint32_t c;
-		c = Wheel((_y * NUM_X + curStep) % WHEEL_MAX);
+		c = wheelHelper(_y, curStep, NUM_Y);
 		for(_x=0; _x<NUM_X; _x++)
 			setPixelColor(_x, _y, c);
 	}
@@ -183,8 +186,8 @@ void max_overload(){
 	static uint8_t r,g,b,brightness;
 	brightness = (overloadDir ? curStep : 255 - curStep);
 	r = (overloadColors[overloadColor][0] * brightness) >> 8;
-    g = (overloadColors[overloadColor][1] * brightness) >> 8;
-    b = (overloadColors[overloadColor][2] * brightness) >> 8;
+	g = (overloadColors[overloadColor][1] * brightness) >> 8;
+	b = (overloadColors[overloadColor][2] * brightness) >> 8;
 	colorFill(C(r,g,b));
 }
 
@@ -193,8 +196,8 @@ void displayText()
 {
 	static int16_t posA = 41, posB = 41;
 	if(curStep > 1) curStep = 0;
-	
-	if(curStep % 2)
+
+	if(curStep % 8)
 	{
 		colorFill(C_OFF); //clear the buffer
 		if(drawString(5, posA, C_RED, "DR WHO SUCKS!"))
@@ -233,27 +236,23 @@ uint8_t animStepSize[ANIM_SIZE] = {
 	1,//colorWipe
 	4,//rainbow_h_wipe
 	4,//rainbow_v_wipe
-	1,//bloomIn
-	1,//bloomOut
+	8,//bloomIn
+	8,//bloomOut
 };
 
-const __FlashStringHelper * animNames(uint8_t i)
+static const char * _animNames[ANIM_SIZE] = 
 {
-	static const __FlashStringHelper * anims[ANIM_SIZE] = 
-	{
-		F("<< BACK"),
-		F("RainbowCycle"),
-		F("Text"),
-		F("FullRainbow"),
-		F("ColorWipe"),
-		F("Rainbow H"),
-		F("Rainbow V"),
-		F("Bloom In"),
-		F("Bloom Out"),
-	};
+	"<< BACK",
+	"RainbowCycle",
+	"Text",
+	"FullRainbow",
+	"ColorWipe",
+	"Rainbow H",
+	"Rainbow V",
+	"Bloom In",
+	"Bloom Out",
+};
 
-	return anims[i];
-}
 
 void stripInit()
 {

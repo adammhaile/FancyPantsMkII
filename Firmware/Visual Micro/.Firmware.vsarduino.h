@@ -39,6 +39,7 @@ void getEncoder();
 void buttonSelect();
 void buttonOverride();
 void displayOverride();
+void toggleEnable();
 //
 
 #include "C:\Program Files (x86)\Arduino\hardware\mighty-1284p\cores\standard\arduino.h"

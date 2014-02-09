@@ -40,6 +40,8 @@ void setPixelColor(uint8_t x, uint8_t y, uint32_t c)
 	}
 }
 
+bool _enabled = true;
+
 uint8_t _brightness = 25;
 #define MIN_BRIGHT 10
 uint8_t _brightPercent = 10;
@@ -62,6 +64,8 @@ uint8_t _brightPercent = 10;
 #define ENCODER_A 10
 #define ENCODER_B 9
 Encoder encoder(ENCODER_A, ENCODER_B);
+static long curEncPos = 50;
+static long newEnc = curEncPos;
 
 #define OLED_RESET 15
 Adafruit_SSD1306 display(OLED_RESET);
@@ -79,25 +83,19 @@ Adafruit_SSD1306 display(OLED_RESET);
 #define MAX_MENU (MENU_SIZE-1)
 #define MENU_SIDE 1
 
-const __FlashStringHelper * menu(uint8_t i)
-{
-	static const __FlashStringHelper * menu[MENU_SIZE] = 
+static const char * _main_menu[MENU_SIZE] = 
 	{
-		F("Animations"),
-		F("Brightness"),
-		F("DON'T PRESS"),
+		"Animations",
+		"Brightness",
+		"On/Off",
 	};
 
-	return menu[i];
-}
 
 uint8_t maxMenu = MAX_MENU;
 uint8_t menuSize = MENU_SIZE;
 
 int8_t curMenu = 0;
 int8_t dispMenu = 0;
-
-long oldEnc = 0;
 
 volatile unsigned long lastSelect = 0;
 volatile unsigned long lastOverride = 0;

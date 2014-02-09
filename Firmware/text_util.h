@@ -96,10 +96,10 @@ bool drawString(int16_t x, int16_t y, uint32_t color, const String &str)
 {
 	int8_t len = str.length();
 	
-	Serial.println(y, DEC);
+	//Serial.println(y, DEC);
 	if(y + (len * 6) <= 0) return false;
 	
-	Serial.println("dS2");
+	//Serial.println("dS2");
 	uint8_t i = 0;
 	while (i < len && y < NUM_Y) {
 		drawChar(x, y, str[i], color);
