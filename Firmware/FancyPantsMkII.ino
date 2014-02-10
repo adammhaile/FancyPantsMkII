@@ -221,7 +221,7 @@ void loop() {
 	{
 		stepRef = millis();
 		animStep();
-		Serial.println(millis() - stepRef, DEC);
+		//Serial.println(millis() - stepRef, DEC);
 	}
 
 	if(selected)

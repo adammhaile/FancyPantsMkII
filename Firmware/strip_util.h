@@ -222,7 +222,7 @@ bool max_overload(){
 	b = (overloadColors[overloadColor][2] * brightness) >> 8;
 	colorFill(C(r,g,b));
 
-	curStep += 50;
+	curStep += 127;
 
 	return true;
 }
@@ -283,11 +283,8 @@ bool fireflies()
 	return true;
 }
 
-bool rotate()
+bool rotate(uint32_t colors[], uint8_t numColors, uint8_t width, uint8_t speed, uint16_t steps)
 {
-	static uint8_t speed = 2;
-	static uint8_t width = 3;
-	static uint8_t numColors = 6;
 	static bool result;
 	result = false;
 	subStep++;
@@ -297,28 +294,40 @@ bool rotate()
 
 		for(_x=0; _x<NUM_X; _x++)
 		{
-			fillX(_x, _rainbow[(((_x+(curStep / speed))/width)%numColors)]);
+			fillX(_x, colors[(((_x+(curStep / speed))/width)%numColors)]);
 		}
 
 		result = true;
 	} 
 
 	curStep += 1;
-	if(curStep == 100 * speed)
+	if(curStep == steps * speed)
 			curStep = 0;
 
 	return result;
 }
 
+bool rotate_rainbow()
+{
+	return rotate(_rainbow, 6, 3, 2, 120);
+}
+
+bool emergency()
+{
+	static uint32_t colors[] = {C_BLUE, C_RED};
+
+	return rotate(colors, 2, 6, 1, 120);
+}
+
 #define DEMO_SIZE 6
 static uint8_t _demoAnim = 0;
 animPtr demoAnims[DEMO_SIZE] = {
-	displayText,
 	colorWipe,
 	rainbow_h_wipe,
 	bloomOut,
+	bloomIn,
 	fireflies,
-	rotate,
+	rotate_rainbow,
 };
 
 bool demo()
@@ -336,7 +345,7 @@ bool demo()
 }
 
 ///End Animations
-#define ANIM_SIZE 11
+#define ANIM_SIZE 12
 #define ANIM_MAX (ANIM_SIZE-1)
 
 animPtr anims[ANIM_SIZE] = {
@@ -350,7 +359,8 @@ animPtr anims[ANIM_SIZE] = {
 	bloomIn,
 	bloomOut,
 	fireflies,
-	rotate,
+	rotate_rainbow,
+	emergency
 };
 
 static const char * _animNames[ANIM_SIZE] = 
@@ -365,7 +375,8 @@ static const char * _animNames[ANIM_SIZE] =
 	"Bloom In",
 	"Bloom Out",
 	"FireFlies",
-	"Rotate",
+	"Rotate Rainbow",
+	"Emergency"
 };
 
 
