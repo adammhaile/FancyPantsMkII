@@ -128,15 +128,16 @@ int freeRam ()
 bool TimeElapsed(unsigned long ref, unsigned long wait)
 {
 	static unsigned long now = 0;
+	static bool result;
+	result = false;
 	now = millis();
 
 	if(now < ref || ref == 0) //for the 50 day rollover or first boot
-		return true;  
+		result = true;  
+	else if((now - ref) > wait)
+		result = true;
 
-	if((now - ref) > wait)
-		return true;
-	else
-		return false;
+	return result;
 }
 
 

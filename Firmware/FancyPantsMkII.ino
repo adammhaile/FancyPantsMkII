@@ -21,7 +21,7 @@ void setup()   {
 	dispMenu = 0;
 	curStep = 0;
 	oldStep = 0;
-	curAnim = 3;
+	curAnim = 1;
 	oldAnim = 1;
 
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
@@ -67,10 +67,10 @@ void setup()   {
 
 void animStep()
 {
-	anims[curAnim]();
-	ledShow();
-
-	curStep += animStepSize[curAnim];
+	if(anims[curAnim]());
+	{
+		ledShow();
+	}
 }
 
 uint8_t menuStart = 0;
@@ -184,6 +184,7 @@ void buttonOverride()
 	if (TimeElapsed(lastOverride, DEBOUNCE_TIME))
 	{   
 		lastOverride = millis();
+		overrideRef = 0;
 		overridden = true;
 		countdown = OVERRIDE_TIME;
 	}
@@ -215,10 +216,12 @@ void toggleEnable()
 }
 
 void loop() {
-	static long stepRef = 0;
-	if(TimeElapsed(stepRef, 33) && _enabled)
+	static unsigned long stepRef = 0;
+	if(TimeElapsed(stepRef, 25) && _enabled)
 	{
+		stepRef = millis();
 		animStep();
+		Serial.println(millis() - stepRef, DEC);
 	}
 
 	if(selected)
@@ -247,7 +250,6 @@ void loop() {
 		}
 		else if(menuLevel == MENU_ANIM)
 		{
-			Serial.println("anim");
 			if(dispMenu == 0)
 			{
 				menuLevel = MENU_HOME;
@@ -258,9 +260,11 @@ void loop() {
 			}
 			else
 			{
+				if(!_enabled) toggleEnable();
 				allOff();
 				curAnim = dispMenu;
 				curStep = 0;
+				subStep = 0;
 			}
 		}
 		else if(menuLevel == MENU_BRIGHT)
@@ -287,6 +291,7 @@ void loop() {
 		if(TimeElapsed(overrideRef, 1000))
 		{
 			overrideRef = millis();
+
 			displayOverride();
 			countdown--;
 			if(countdown < 1)

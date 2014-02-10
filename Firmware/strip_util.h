@@ -2,6 +2,8 @@
 #include "globals.h"
 #include "text_util.h"
 
+typedef bool (* animPtr)();
+
 uint32_t _rainbow[] =
 {
 	C_RED,
@@ -28,6 +30,24 @@ void allOff() {
 }
 
 static uint8_t _x, _y;
+
+void fillX(uint8_t x, uint32_t c)
+{
+	if(x >= NUM_X) return;
+	for(_y=0;_y<NUM_Y;_y++)
+	{
+		setPixelColor(x, _y, c);
+	}
+}
+
+void fillY(uint8_t y, uint32_t c)
+{
+	if(y >= NUM_Y) return;
+	for(_x=0;_x<NUM_X;_x++)
+	{
+		setPixelColor(_x, y, c);
+	}
+}
 
 //Input a value 0 to cycle_max to get a color value.
 //The colours are a transition r - g -b - back to r
@@ -71,24 +91,23 @@ uint16_t curStep = 0;
 uint16_t oldStep = 0;
 uint8_t  curAnim = 1;
 uint8_t  oldAnim = 1;
-void rainbowCycle() {
-	//static uint16_t i;
-	//for(i=0; i< strip.numPixels(); i++) {
-	//	strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + curStep) & 255));
-	//}
-	//if(curStep >= 256)
-	//	curStep = 0;
-}
+uint8_t subStep = 0;
 
-void fullRainbow() {
+
+bool fullRainbow() {
 	colorFill(Wheel(curStep & 255));
+
+	curStep += 2;
 	if(curStep >= 256)
 		curStep = 0;
+
+	return true;
 }
 
 uint8_t _wipeColor = 0;
-void colorWipe() {
+bool colorWipe() {
 	static uint8_t x, y;
+	allOff();
 	for(x=0; x < NUM_X; x++)
 	{
 		for(y=0; y<=curStep; y++)
@@ -97,15 +116,20 @@ void colorWipe() {
 		}
 	}
 
+	curStep += 1;
 	if(curStep >= NUM_Y)
 	{
-		allOff();
-		curStep = 0;
+		curStep = 1;
 
 		_wipeColor++;
 		if(_wipeColor >= 6)
+		{
 			_wipeColor = 0;
+			curStep = 0;
+		}
 	}
+
+	return true;
 }
 
 /*
@@ -126,14 +150,15 @@ void bloom(bool dir) {
 		}
 	}
 	 
+	curStep += 8;
 	if(curStep >= WHEEL_MAX)
 		curStep = 0;
 }
 
-void bloomOut(){ bloom(true); }
-void bloomIn(){ bloom(false); }
+bool bloomOut(){ bloom(true); return true; }
+bool bloomIn(){ bloom(false); return true; }
 
-void rainbow_h_wipe()
+bool rainbow_h_wipe()
 {
 	for(_x=0; _x<NUM_X; _x++)
 	{
@@ -143,11 +168,14 @@ void rainbow_h_wipe()
 			setPixelColor(_x, _y, c);
 	}
 
+	curStep += 4;
 	if(curStep >= WHEEL_MAX)
 		curStep = 0;
+
+	return true;
 }
 
-void rainbow_v_wipe()
+bool rainbow_v_wipe()
 {
 	for(_y=0; _y<NUM_Y; _y++)
 	{
@@ -157,8 +185,11 @@ void rainbow_v_wipe()
 			setPixelColor(_x, _y, c);
 	}
 
+	curStep += 4;
 	if(curStep >= WHEEL_MAX)
 		curStep = 0;
+
+	return true;
 }
 
 #define OVERLOAD_COUNT 4
@@ -171,7 +202,8 @@ uint8_t overloadColors[OVERLOAD_COUNT][3] =
 };
 uint8_t overloadColor = 0;
 bool overloadDir = true;
-void max_overload(){
+bool max_overload(){
+
 	if(curStep >= 256) 
 	{
 		overloadDir = !overloadDir;
@@ -189,61 +221,142 @@ void max_overload(){
 	g = (overloadColors[overloadColor][1] * brightness) >> 8;
 	b = (overloadColors[overloadColor][2] * brightness) >> 8;
 	colorFill(C(r,g,b));
+
+	curStep += 50;
+
+	return true;
 }
 
 
-void displayText()
+#define TEXT_START 41
+bool displayText()
 {
-	static int16_t posA = 41, posB = 41;
-	if(curStep > 1) curStep = 0;
+	static int16_t posA = TEXT_START, posB = TEXT_START;
+	static bool result;
+	result = false;
+	subStep++;
 
-	if(curStep % 8)
+	if(subStep >= 2)
 	{
+		subStep = 0;
+
 		colorFill(C_OFF); //clear the buffer
 		if(drawString(5, posA, C_RED, "DR WHO SUCKS!"))
 			posA--;
 		else
-			posA = 41;
+			posA = TEXT_START;
 
 		if(drawString(11, posB, C_GREEN, "BEST IN terms of PANTS!"))
 			posB--;
 		else
-			posB = 41;
+			posB = TEXT_START;
+		result = true;
 	}
+
+	curStep += 1;
+	if(posB == TEXT_START)
+		curStep = 0;
+
+	return result;
 }
+
+//uint16_t _random(uint16_t max)
+//{
+//	return (micros() & 0xfff) % max; 
+//}
+
+bool fireflies()
+{
+	static long rnd;
+	for(_x=0; _x<NUM_X; _x++)
+	{
+		for(_y=0; _y<NUM_Y; _y++)
+		{
+			setPixelColor(_x, _y, Wheel((int)random(0,WHEEL_MAX)));
+		}
+	}
+
+	curStep += 1;
+	if(curStep >= 50)
+		curStep = 0;
+
+	return true;
+}
+
+bool rotate()
+{
+	static uint8_t speed = 2;
+	static uint8_t width = 3;
+	static uint8_t numColors = 6;
+	static bool result;
+	result = false;
+	subStep++;
+	if(subStep >= speed)
+	{
+		subStep = 0;
+
+		for(_x=0; _x<NUM_X; _x++)
+		{
+			fillX(_x, _rainbow[(((_x+(curStep / speed))/width)%numColors)]);
+		}
+
+		result = true;
+	} 
+
+	curStep += 1;
+	if(curStep == 100 * speed)
+			curStep = 0;
+
+	return result;
+}
+
+#define DEMO_SIZE 6
+static uint8_t _demoAnim = 0;
+animPtr demoAnims[DEMO_SIZE] = {
+	displayText,
+	colorWipe,
+	rainbow_h_wipe,
+	bloomOut,
+	fireflies,
+	rotate,
+};
+
+bool demo()
+{
+	static bool result;
+	result = demoAnims[_demoAnim]();
+	if(curStep == 0)
+	{
+		_demoAnim++;
+		if(_demoAnim >= DEMO_SIZE)
+			_demoAnim = 0;
+	}
+
+	return result;
+}
+
 ///End Animations
-#define ANIM_SIZE 9
+#define ANIM_SIZE 11
 #define ANIM_MAX (ANIM_SIZE-1)
 
-typedef void (* animPtr)();
 animPtr anims[ANIM_SIZE] = {
 	max_overload,
-	rainbowCycle,
+	demo,
 	displayText,
 	fullRainbow,
 	colorWipe,
 	rainbow_h_wipe,
 	rainbow_v_wipe,
 	bloomIn,
-	bloomOut
-};
-
-uint8_t animStepSize[ANIM_SIZE] = {
-	50,//max_overload
-	1,//rainbowCycle
-	1,//displayText
-	2,//fullRainbow
-	1,//colorWipe
-	4,//rainbow_h_wipe
-	4,//rainbow_v_wipe
-	8,//bloomIn
-	8,//bloomOut
+	bloomOut,
+	fireflies,
+	rotate,
 };
 
 static const char * _animNames[ANIM_SIZE] = 
 {
 	"<< BACK",
-	"RainbowCycle",
+	"Demo",
 	"Text",
 	"FullRainbow",
 	"ColorWipe",
@@ -251,6 +364,8 @@ static const char * _animNames[ANIM_SIZE] =
 	"Rainbow V",
 	"Bloom In",
 	"Bloom Out",
+	"FireFlies",
+	"Rotate",
 };
 
 
