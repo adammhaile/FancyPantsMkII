@@ -192,13 +192,13 @@ bool rainbow_v_wipe()
 	return true;
 }
 
-#define OVERLOAD_COUNT 4
+#define OVERLOAD_COUNT 1
 uint8_t overloadColors[OVERLOAD_COUNT][3] = 
 {
 	{255,255,255},
-	{255,0,0},
-	{0,255,0},
-	{0,0,255},
+	//{255,0,0},
+	//{0,255,0},
+	//{0,0,255},
 };
 uint8_t overloadColor = 0;
 bool overloadDir = true;
@@ -207,12 +207,12 @@ bool max_overload(){
 	if(curStep >= 256) 
 	{
 		overloadDir = !overloadDir;
-		if(overloadDir)
-		{
-			overloadColor++;
-			if(overloadColor >= OVERLOAD_COUNT)
-				overloadColor = 0;
-		}
+		//if(overloadDir)
+		//{
+		//	overloadColor++;
+		//	if(overloadColor >= OVERLOAD_COUNT)
+		//		overloadColor = 0;
+		//}
 		curStep = 0;
 	}
 	static uint8_t r,g,b,brightness;
@@ -259,11 +259,6 @@ bool displayText()
 
 	return result;
 }
-
-//uint16_t _random(uint16_t max)
-//{
-//	return (micros() & 0xfff) % max; 
-//}
 
 bool fireflies()
 {
@@ -319,11 +314,99 @@ bool emergency()
 	return rotate(colors, 2, 6, 1, 120);
 }
 
-#define DEMO_SIZE 6
+uint32_t larsonColors[] = 
+{
+	C(64,0,0),
+	C(128,0,0),
+	C(255,0,0),
+};
+bool larson()
+{
+	static bool result;
+	result = false;
+	static bool dir = true;
+	static int8_t step = 0;
+
+
+	subStep++;
+
+	if(subStep >= 2)
+	{
+		subStep = 0;
+		allOff();
+		fillX(step - 2, larsonColors[0]);
+		fillX(step - 1, larsonColors[1]);
+		fillX(step, larsonColors[2]);
+		fillX(step + 1, larsonColors[1]);
+		fillX(step + 2, larsonColors[0]);
+
+		step += dir ? 1 : -1;
+		if(step >=11 || step <= 0)
+		{
+			dir = !dir;
+		}
+
+		result = true;
+	}
+
+	curStep += 1;
+	if(curStep >= 48)
+		curStep = 0;
+
+	return result;
+}
+
+bool brite_off()
+{
+	colorFill(C_WHITE);
+
+	bool result = (curStep == 0);
+
+	curStep++;
+	if(curStep > 50) curStep = 0;
+
+	return result;
+}
+
+bool police()
+{
+	static bool result;
+	static uint8_t start, stop;
+	result = false;
+
+	if(curStep % 2)
+	{
+		if((curStep%10)/5)
+		{
+			start = 0;
+			stop = 5;
+		}
+		else
+		{
+			start = 6;
+			stop = 11;
+		}
+
+		for(_x=start;_x<=stop;_x++)
+			fillX(_x, C_BLUE);
+	}
+	else
+	{
+		allOff();
+	}
+
+	curStep++;
+	if(curStep > 100) curStep = 0;
+
+	return true;
+}
+
+#define DEMO_SIZE 7
 static uint8_t _demoAnim = 0;
 animPtr demoAnims[DEMO_SIZE] = {
 	colorWipe,
 	rainbow_h_wipe,
+	police,
 	bloomOut,
 	bloomIn,
 	fireflies,
@@ -344,8 +427,9 @@ bool demo()
 	return result;
 }
 
+
 ///End Animations
-#define ANIM_SIZE 12
+#define ANIM_SIZE 15
 #define ANIM_MAX (ANIM_SIZE-1)
 
 animPtr anims[ANIM_SIZE] = {
@@ -360,7 +444,10 @@ animPtr anims[ANIM_SIZE] = {
 	bloomOut,
 	fireflies,
 	rotate_rainbow,
-	emergency
+	emergency,
+	larson,
+	brite_off,
+	police,
 };
 
 static const char * _animNames[ANIM_SIZE] = 
@@ -376,7 +463,10 @@ static const char * _animNames[ANIM_SIZE] =
 	"Bloom Out",
 	"FireFlies",
 	"Rotate Rainbow",
-	"Emergency"
+	"Emergency",
+	"Larson",
+	"Brite Off",
+	"Police",
 };
 
 
