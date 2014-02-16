@@ -60,6 +60,7 @@ void toggleEnable();
 #include "G:\GitHub\FancyPantsMkII\Firmware\direct_pin_read.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\glcdfont.c"
 #include "G:\GitHub\FancyPantsMkII\Firmware\globals.h"
+#include "G:\GitHub\FancyPantsMkII\Firmware\gol.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\interrupt_config.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\interrupt_pins.h"
 #include "G:\GitHub\FancyPantsMkII\Firmware\strip_util.h"

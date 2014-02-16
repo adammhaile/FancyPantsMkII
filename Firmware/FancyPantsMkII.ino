@@ -78,11 +78,6 @@ uint8_t menuIndex = 0;
 uint8_t menuLine = 0;
 void displayMenu()
 {
-	//noInterrupts();
-
-	//static uint32_t m;
-	//m = millis();
-
 	display.setTextSize(1);
 	display.setTextColor(WHITE);
 	display.setCursor(0,0);
@@ -128,12 +123,8 @@ void displayMenu()
 
 	display.display();
 	display.clearDisplay();
-
-	//Serial.println(millis() - m, DEC);
-
+	
 	updateDisplay = false;
-
-	//interrupts();
 }
 
 void getEncoder() {

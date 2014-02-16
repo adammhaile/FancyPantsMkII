@@ -1,6 +1,7 @@
 #include "arrays.h"
 #include "globals.h"
 #include "text_util.h"
+#include "gol.h"
 
 typedef bool (* animPtr)();
 
@@ -149,7 +150,7 @@ void bloom(bool dir) {
 			setPixelColor(_x, _y, c);
 		}
 	}
-	 
+
 	curStep += 8;
 	if(curStep >= WHEEL_MAX)
 		curStep = 0;
@@ -297,7 +298,7 @@ bool rotate(uint32_t colors[], uint8_t numColors, uint8_t width, uint8_t speed, 
 
 	curStep += 1;
 	if(curStep == steps * speed)
-			curStep = 0;
+		curStep = 0;
 
 	return result;
 }
@@ -401,6 +402,114 @@ bool police()
 	return true;
 }
 
+void setGOLRandom(uint8_t num, uint8_t color)
+{
+	static uint8_t rand = 0;
+	for(_x=0;_x<NUM_X;_x++)
+	{
+		for(_y=0;_y<NUM_Y;_y++)
+		{
+			if((_y%8) == 0)
+			{
+				rand = (uint8_t)random(0,256);
+			}
+
+			setWorldPixel(_x, _y, num, color, (rand & (1<<(_y&7))) > 0);
+		}
+	}
+}
+
+static bool _golNum = false;
+void runGOL(uint8_t color, bool regen)
+{
+	if(regen)
+	{
+		setGOLRandom((uint8_t)_golNum, color);
+	}
+	else
+	{
+		for(_x=0;_x<NUM_X;_x++)
+		{
+			for(_y=0;_y<NUM_Y;_y++)
+			{
+				switch (getLiveDie(_x, _y, !_golNum, color))
+				{
+				case -1: //dies
+					setWorldPixel(_x, _y, _golNum, color, false);
+					break;
+				case 1: //born
+					setWorldPixel(_x, _y, _golNum, color, true);
+					break;
+				default: //stays the same
+					setWorldPixel(_x, _y, _golNum, color, 
+						getWorldPixel(_x, _y, !_golNum, color));
+					break;
+				}
+
+			}
+		}
+	}
+}
+bool stepGOL(bool r, bool g, bool b)
+{
+	static uint8_t step = 10;
+	static bool result;
+	result = false;
+
+	subStep++;
+	if(subStep >= step || curStep == 0)
+	{
+		subStep = 0;
+
+		if(r) runGOL(GOL_RED, curStep < step);
+		if(g) runGOL(GOL_GRN, curStep < step);
+		if(b) runGOL(GOL_BLU, curStep < step);
+
+		for(_x=0;_x<NUM_X;_x++) 
+		{
+			for(_y=0;_y<NUM_Y;_y++)
+			{
+				static uint8_t cR, cG, cB;
+				cR = r && getWorldPixel(_x, _y, _golNum, GOL_RED) ? 255 : 0;
+				cG = g && getWorldPixel(_x, _y, _golNum, GOL_GRN) ? 255 : 0;
+				cB = b && getWorldPixel(_x, _y, _golNum, GOL_BLU) ? 255 : 0;
+
+				setPixelColor(_x, _y, C(cR,cG,cB));
+			}
+		}
+
+		_golNum = !_golNum;
+
+		result = true;
+	}
+
+	curStep++;
+	if(curStep >= 100 * step)
+		curStep = 0;
+
+	return result;
+}
+
+bool gol_red()
+{
+	stepGOL(true, false, false);
+}
+
+bool gol_green()
+{
+	stepGOL(false, true, false);
+}
+
+bool gol_blue()
+{
+	stepGOL(false, false, true);
+}
+
+bool gol_all()
+{
+	stepGOL(true, true, true);
+}
+
 #define DEMO_SIZE 7
 static uint8_t _demoAnim = 0;
 animPtr demoAnims[DEMO_SIZE] = {
@@ -429,7 +538,7 @@ bool demo()
 
 
 ///End Animations
-#define ANIM_SIZE 15
+#define ANIM_SIZE 19
 #define ANIM_MAX (ANIM_SIZE-1)
 
 animPtr anims[ANIM_SIZE] = {
@@ -448,6 +557,10 @@ animPtr anims[ANIM_SIZE] = {
 	larson,
 	brite_off,
 	police,
+	gol_red,
+	gol_green,
+	gol_blue,
+	gol_all,
 };
 
 static const char * _animNames[ANIM_SIZE] = 
@@ -467,6 +580,10 @@ static const char * _animNames[ANIM_SIZE] =
 	"Larson",
 	"Brite Off",
 	"Police",
+	"GOL Red",
+	"GOL Green",
+	"GOL Blue",
+	"GOL All",
 };
 
 

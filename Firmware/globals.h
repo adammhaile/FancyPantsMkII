@@ -40,7 +40,7 @@ void setPixelColor(uint8_t x, uint8_t y, uint32_t c)
 	}
 }
 
-bool _enabled = true;
+bool _enabled = false;
 
 uint8_t _brightness = 25;
 #define MIN_BRIGHT 10
