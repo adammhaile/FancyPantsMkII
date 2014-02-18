@@ -33,13 +33,14 @@ LIBS:SparkFun
 LIBS:w_connectors
 LIBS:w_device
 LIBS:ML_Kicad
+LIBS:FancyPantsMkII-cache
 EELAYER 27 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "30 dec 2013"
+Date "18 feb 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -421,9 +422,9 @@ SDA
 Text GLabel 6050 3400 0    30   Input ~ 0
 SCL
 Text GLabel 6050 3600 0    30   Input ~ 0
-RST
+DISP_RST
 Text GLabel 3100 4700 2    30   Input ~ 0
-RST
+DISP_RST
 Wire Wire Line
 	3050 4700 3100 4700
 Text GLabel 6050 4000 0    30   Input ~ 0

@@ -365,6 +365,9 @@
     (net BTN
       (pins IC1-17 S1-3 S1-4)
     )
+    (net DISP_RST
+      (pins IC1-21 J2-4)
+    )
     (net ENC_A
       (pins IC1-16 E1-1)
     )
@@ -384,7 +387,7 @@
     (net MOSI
       (pins IC1-6 JP1-4)
     )
-    (net "N-0000041"
+    (net "N-0000042"
       (pins JP2-DTR C1-1)
     )
     (net NEOA
@@ -394,7 +397,7 @@
       (pins J1-3 IC1-2)
     )
     (net RST
-      (pins IC1-9 IC1-21 JP1-5 C1-2 R1-2 J2-4)
+      (pins IC1-9 JP1-5 C1-2 R1-2)
     )
     (net SCK
       (pins IC1-8 JP1-3)
@@ -414,8 +417,8 @@
     (net TXO
       (pins JP2-TXO IC1-14)
     )
-    (class kicad_default "" 5VCC BTN ENC_A ENC_B ENC_BTN GND MISO MOSI "N-0000041"
-      NEOA NEOB RST SCK SCL SDA TOSC1 TOSC2 TXO
+    (class kicad_default "" 5VCC BTN DISP_RST ENC_A ENC_B ENC_BTN GND MISO
+      MOSI "N-0000042" NEOA NEOB RST SCK SCL SDA TOSC1 TOSC2 TXO
       (circuit
         (use_via Via[0-1]_889:635_um)
       )
