@@ -98,7 +98,7 @@ uint8_t subStep = 0;
 bool fullRainbow() {
 	colorFill(Wheel(curStep & 255));
 
-	curStep += 2;
+	curStep += 5;
 	if(curStep >= 256)
 		curStep = 0;
 
@@ -513,7 +513,7 @@ bool gol_all()
 #define DEMO_SIZE 7
 static uint8_t _demoAnim = 0;
 animPtr demoAnims[DEMO_SIZE] = {
-	colorWipe,
+	fullRainbow,
 	rainbow_h_wipe,
 	police,
 	bloomOut,

@@ -25,8 +25,10 @@ void setup()   {
 	oldAnim = 1;
 
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3D);  // initialize with the I2C addr 0x3D (for the 128x64)
-	display.clearDisplay();
 	display.display();
+	///delay(1500);
+	//display.clearDisplay();
+	//display.display();
 
 	//set button pin and pull-up resistor
 	pinMode(ENCODER_BTN_PIN, INPUT);
@@ -61,8 +63,7 @@ void setup()   {
 	allOff();
 	ledShow();
 
-	//Timer1.initialize();
-	//Timer1.attachInterrupt(animStep, 1000000 / 30); // 30 frames/second
+	display.clearDisplay();
 }
 
 void animStep()
